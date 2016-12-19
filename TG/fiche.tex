@@ -1,0 +1,410 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}%           gestion des accents (source)
+\usepackage[T1]{fontenc}%              gestion des accents (PDF)
+\usepackage[francais]{babel}%          gestion du français
+\usepackage{textcomp}%
+
+
+\DeclareUnicodeCharacter{00A0}{ }
+
+\pdfinfo{
+  /Title (example.pdf)
+  /Creator (TeX)
+  /Producer (pdfTeX 1.40.0)
+  /Author (Seamus)
+  /Subject (Example)
+  /Keywords (pdflatex, latex,pdftex,tex)}
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+    {\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+    }
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+%My Environments
+\newtheorem{example}[section]{Example}
+% -----------------------------------------------------------------------
+
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\underline{Théorie des Graphes}} \\
+\end{center}
+
+\section{Définitions}
+  \subsection{Vocabulaire}
+    \begin{itemize}
+      \item Graphe
+        \begin{itemize}
+          \item $ G (X, U, \Psi, \nu, \epsilon)$, $X$ ensemble des noeuds, $U$ ensemble de sommets, $\Psi : U \rightarrow X x X$, $\nu$ et $\epsilon$ fonctions d'étiquetage.
+          \item Ordre d'un graphe $|X|$: cardinalité de $X$.
+          \item Taille du graphe $||X||$: cardinalité de $U$.
+        \end{itemize}
+      \item Multi-graphe
+        Peut avoir plusieurs fois le même arc/arête entre 2 n\oe uds.
+      \item Arc/Arête
+        \begin{itemize}
+          \item Arc: $(x, y)$ orienté.
+          \item Arête: $[x, y]$ non-orienté.
+        \end{itemize}
+      \item Arc
+        \begin{itemize}
+          \item Ensemble des successeurs x de $x$ tel que $(x, y) \in U$: $\Gamma^{+}(x)$.
+          \item Ensemble des prédécesseurs x de $x$ tel que $(y, x) \in U$: $\Gamma^{-}(x)$.
+        \end{itemize}
+      \item Degré (d)
+        \begin{itemize}
+          \item Demi degré extérieur: nb arcs adjacents partant de x: $d^{+}(x)$.
+          \item Demi degré intérieur: nb arcs adjacents arrivant à x: $d^{-}(x)$.
+            $\implies d(x) = d^{+}(x) + d^{-}(x)$
+          \item Tous les noeuds avec même degré: graphe régulier.
+        \end{itemize}
+      \item Adjacent
+        $ u = (x, y)$
+        \begin{itemize}
+          \item u adjacent à y
+          \item y adjacent à x
+          \item x et y adjacents à u
+        \end{itemize}
+      \item Puit: $\Gamma^{+}(x) = \emptyset$.
+      \item Source: $\Gamma^{-}(x) = \emptyset$.
+      \item Noeud isolé: $\Gamma^{-}(x) = \Gamma^{+}(x) = \emptyset$.
+      \item Incidence - niveau arc pour un noeud.
+        \begin{itemize}
+          \item x extrémité initiale: $\omega^{+}$.
+          \item x extrémité terminale: $\omega^{-}$.
+        \end{itemize}
+      \item Cocycle $\omega(i)$: liste des arcs ayant $i$ comme extrémité.
+      \item Incidence - niveau ensemble
+        $X' \subseteq X, U' \subseteq U, u = (x, y)$
+        \begin{itemize}
+          \item $U'$ incident extérieurement à $X' \iff \forall u \in U', x \in X' \land y \notin X'$
+          \item $U'$ incident intérieurement à $X' \iff \forall u \in U', x \notin X' \land y \in X'$
+        \end{itemize}
+      \item Cocircuit: Ensemble d'arcs ayants toutes leurs origines dans un sous-ensemble A de X et toutes leurs extrémités dans $(X-A)$.
+        Pour tout sous-ensemble de noeuds A on associe 2 cocircuits/ 1 cocycle:
+          \begin{itemize}
+            \item $\omega^{+}(A) = \{ (x, y) \in U / x \in \land y \notin A \}$
+            \item $\omega^{-}(A) = \{ (x, y)\in U / x \notin A \land y \in A \}$
+          \end{itemize}
+      \item Graphe complet ($K_{ordre}$): $\forall i, j \in X, i \ne j, (i, j) \in U \land (j, i) \in U$.
+      \item Sous-graphe de $G = (X, U)$: $X'\subseteq X, G_{X'} = (X', U_{X'})$.
+        $\implies$ $G$ moins quelques noeuds et leurs arcs adjacents.
+      \item Graphe partiel de $G = (X, U)$: $U'\subseteq U, G_{U'} = (X, U')$
+        $implies$ $G$ moins quelques arcs.
+      \item Sous-graphe partiel: Graphe partiel d'un sous graphe de $G$
+      \item Clique: Ensemble des noeuds d'un sous graphe complet de G. (sous-ensemble de noeuds deux à deux adjacents)
+      \item Graphe complémentaire de $G(X, U)$: même ensemble de noeuds mais arcs complémentaires
+        $(i, j) \in U \implies (i, j) \notin \overline{\rm U}$
+        $(i, j) \notin U \implies (i, j) \in \overline{\rm U}$
+      \item Graphe simple: ne possède pas deux arcs ayant même extrémités initiale et terminale (ni boucle)
+      \item p-Graphe: peut avoir au maximum $p$ répétions d'un arc ayant les mêmes extrémités initiales et finales. $\implies$ fonction d'étiquetage. $p > 1$: multi-graphe.
+      \item Symétrique: $\forall x \in X, y \in X, x \ne y: (x, y) \in U \implies (y, x) \in U$.
+      \item Antisymétrique: $\forall x \in X, y \in X, x \ne y: (x, y) \in U \implies (y, x) \notin U$
+      \item Transitif: $\forall x \in X, y \in X, z \in X: (x, y) \in U \land (y, z) \in U \implies (x, z) \in U$.
+      \item Régulier: $\forall x \in X, y \in X: d(x) = d(y)$
+      \item Chaîne: séquence d'arc/arête peut importe le sens.
+      \item Cycle: chaîne revenant au point de départ.
+      \item Chemin: séquence d'arcs (extrémité terminal et finale coïncident entre 2 arcs consécutifs).
+      \item Circuit: chemin revenant au point de départ.
+    \end{itemize}
+  \subsection{Structure}
+    \begin{itemize}
+      \item Isomorphe: $G' = (X', U') et G'' = (X'', U'')$ sont isomorphes s'il existe deux bijections:
+        \begin{itemize}
+          \item $BX: X' \rightarrow X''$
+          \item $BU: U' \rightarrow U''$
+        \end{itemize}
+        Deux arcs qui se correspondent dans la bijection BU aient pour extrémités initiales et terminales respectivement des noeuds qui se correspondent dans la bijection BX.
+      \item Bi-parti: L'ensemble des noeuds peut être partitionné en deux classes de sorte que deux noeuds de la même classe ne soient jamais adjacents.
+      \item Couplage: Ensemble d'arêtes tel que deux quelconques des arêtes sont non adjacente
+    \end{itemize}
+
+
+\rule{0.3\linewidth}{0.25pt}
+
+\section{Propriétés}
+  \subsection{Topologie}
+    \begin{itemize}
+      \item Chaîne: séquence d'arête / arc
+      \item Cycle: chaîne dont les extrémités coïncident
+      \item Cycle élémentaire: cycle minimal. En parcourant un cycle élémentaire on ne rencontre pas deux fois le même noeud.
+    \end{itemize}
+  \subsection{Chemins}
+    Soit $G = (X, U)$ un graphe orienté $\Omega$-valué est
+      \begin{itemize}
+        \item ensemble de noeuds X.
+        \item ensemble de triplets, U (noeud, noeud, \emph{valuation}) où \emph{valuation} $\in \Omega$.
+        \item valuations = coût ou poids.
+      \end{itemize}
+    Sortes de chemins:
+    \begin{itemize}
+      \item Élémentainre: passe au plus une fois même noeuds.
+      \item Simple: passe au plus une fois même arc. (simple n'implique pas élémentaire).
+      \item Eulérien: passe par chaque arc une fois et une seule.
+      \item Hamiltonien: passe par chaque noeud une fois et une seule
+      \item Circult: chemin dont les deux extrémités coïncident
+    \end{itemize}
+  \subsection{Connexité}
+    \begin{itemize}
+      \item Connexité $(x, y) \iff \exists$ chaîne $(x, y) \lor x = y$
+      \item Forte connexité $(x, y) \iff \exists$ [Chemin $(x, y) \land$ Chemin$(x,y)$] $\lor x = y$.
+      \item Graphe connexe si tous les noeuds sont deux à deux en connexité.
+      \item Graphe fortement connexe connexe si tous les noeuds sont deux à deux en forte connexité.
+    \end{itemize}
+  \subsection{Composante}
+    \begin{itemize}
+      \item Composante connexe: ensemble de noeuds qui ont deux à deux la relation de (forte)connexité. De plus tout n\oe u en dehors de la composante n'a pas de relation de (forte)connexité avec aucun des éléments de la composante.
+      \item Graphe connexe que si il n'a qu'une seule composante connexe.
+      \item Classe d'équivalence: sous-graphe fortement connexe maximal.
+    \end{itemize}
+  \subsection{Quasi-fortement connexe}
+    Pour tout couple de n\oe uds $(x,y)$, il existe un noeud $z(x,y)$ d'où part un chemin allant à $x$ et un à $y$.
+  \subsection{Propriétés}
+    \begin{itemize}
+      \item Graphe réduit: graphé limité aux classes d'équivalence.
+      \item Nombre de connexité: nombre de classes d'équivalence:
+        graphe connexe $\iff$ nombre connexité $ = 1$.
+      \item Complexité de la vérification de la connexité: $O(M)$.
+    \end{itemize}
+  \subsection{Arbre}
+    \begin{itemize}
+      \item Arbre
+        \begin{itemize}
+          \item Connexe et sans cycle.
+          \item Sans cycle et admet $(n-1)$ arcs.
+          \item Connexe et admet $(n-1)$ arcs.
+          \item Sans cycle et l'ajout d'un arc crée un cycle et un seul
+          \item Connexe minimal et si on supprime un arc il ne l'est plus
+          \item Tout couple de n\oe u est relié par une chaîne et une seule
+        \end{itemize}
+        \item Fôret: Graphe dont chaque composante est un arbre.
+        \item Arbre de G: Graphe partiel maximal sans cycle de G.
+        \item Racine: existe chemin racine vers tout noeud.
+        \item Anti-Racine: existe chemin tout noeud vers anti-racine.
+        \item Coarbre de G: Graphe partiel maximal sans cocycle de G.
+    \end{itemize}
+  \subsection{Arborescence}
+    G (anti-)arborescence de (anti-)racine $a$ si:
+      \begin{itemize}
+        \item $a$ est une (anti-)racine de G.
+        \item G arbre.
+      \end{itemize}
+    Arborescence = arbre orienté dans même sens. $\implies$ si inverse sens arcs on obtient anti-arborescence.
+    Caractérisation d'une arborescence:
+      \begin{itemize}
+        \item G est un arbre admettant le n\oe ud $a$ comme racine.
+        \item $\forall x \in X \exists $ un chemin unique dans G joignant $a$ à $x$.
+        \item G admet $a$ comme racine et est minimal pour cette propriété.
+        \item G connexe et $\Gamma^{-}(a) = 0 \land \Gamma^{-}(x) = 1 \forall x \ne a$.
+        \item G sans cycle et relations (1) vérifiés.
+        \item G admet $a$ comme racine et est sans cycle
+        \item G admet $a$ comme racine et possède $(n-1)$ arcs.
+      \end{itemize}
+  \subsection{Points sensibles}
+    \begin{itemize}
+      \item Point d'articulation: n\oe ud dont la suppression augmente le nombre de composantes connexes.
+      \item Isthme: arête dont la suppression augmente le nombre de composantes connexes.
+    \end{itemize}
+  \subsection{Couplages}
+    \begin{itemize}
+      \item Deux arêtes quelconques du couplage ne sont pas adjacentes.
+      \item Couplage maximum: couplage avec le plus d'arêtes.
+      \item N\oe ud $x$ saturé par un couplage C s'il existe une arête de C dont $x$ est une extrémité.
+      \item Couplage parfait: sature tous les n\oe uds du graphe.
+    \end{itemize}
+  \subsection{Recouvrement (minimum)}
+    Famille d'arêtes telle que tout n\oe ud du graphe soit l'extrémité d'au moins une arête de la famille.
+  \subsection{Stable}
+    \begin{itemize}
+      \item Graphe orienté ou non
+      \item Principe: 2 noeuds de $S$ ne sont pas adjacents
+      \item $S \subseteq X$ Stable $\iff \forall x \in S, \Gamma(x) \cap S = \emptyset$.
+      \item En général non unique.
+    \end{itemize}
+  \subsection{Absorbtion}
+    Tous les n\oe uds n'appartenant pas à $A$ ont au moins un successeur dans $A$.
+    \begin{itemize}
+      \item Principe: Graphe orienté.
+      \item Formulation: A absorbant $\iff \forall x \notin A, \Gamma^{+}(x) \cap A \ne \emptyset$
+      \item Objectif: Ensemble absorbant minimal.
+    \end{itemize}
+  \subsection{Support (Transversal)}
+    Toute arête de $G$ a au moins un extrémité dans $T$.
+    \begin{itemize}
+      \item Principe: non-orienté quelque soit le successeur.
+      \item Formulation: $T$ support de $G$ $\iff (X - T)$ stage de $G$.
+    \end{itemize}
+  \subsection{Noyau}
+    Noyau est un ensemble de S stable et absorbant.
+    \begin{itemize}
+      \item TOut graphe sans circuit a un noyau unique
+    \end{itemize}
+  \subsection{Nombre chromatique $\gamma$}
+    Nombre minimal de couleurs nécessaires pour colorier les n\oe uds d'un graphe sans que deux n\oe uds adjacents soient de la même couleur.
+    C'est dont le nombre minimum de stable dont l'union est $X$.
+  \subsection{Planarité}
+    Graphe planaire lorsqu'il admet une représentation sur un plan telle que deux arêtes ne se rencontrent pas en dehors de leurs extrémités. Objectif: lisibilité.
+    \begin{itemize}
+      \item Planaire saturé: l'ajout d'un arc fait perdre la planarité.
+      \item $Dim > 2$.
+      \item Graphe non planaire $\iff$ contient un sous-graphe homéomorphe.
+    \end{itemize}
+  \subsection{Dualité}
+    Faire correspondre à un graphe $G$ un graphe $G^{*}$ tel que:
+      \begin{itemize}
+        \item À l'intérieur de toute face $s$ de $G$ on place un n\oe ud $x^{*}$ de $G^{*}$ (avec une face extérieure).
+        \item A toute arête $e$ de $G$ on fera correspondre une arête $e^{*}$ de $G^{*}$ qui reliera les n\oe uds $x^{*}$ et $y^{*}$ correspondant aux faces $s$ et $t$ de part et d'autre de l'arête $e$.
+        \item $G^{*}$ est planaire, connexe et sans n\oe ud isolé.
+      \end{itemize}
+  \subsection{Graphe de Ligne}
+    Chaque arête de $G$ est un n\oe ud du graphe $G'$. Arête dans $G'$ entre 2 n\oe uds si les arêtes correspondantes dans $G$ sont adjacentes.
+  \subsection{Arbre de coût minimal}
+    Trouver un arbre dont la somme des poids des arcs est minimal afin de limiter le nombre de connextions entre n\oe uds avec une valuation sur les arcs.
+  \subsection{Gestion des flots}
+    \begin{itemize}
+      \item Graphe $\rightarrow$ Réseau:
+        \begin{itemize}
+          \item Graphe sans boucle.
+          \item Chaque arche associé à une capacité $c(u) \ge 0$.
+          \item Un seul n\oe ud n'a pas de prédécesseurs (source).
+          \item Un seul n\oe ud n'a pas de successeurs (puits).
+        \end{itemize}
+      \item Flot
+        \begin{itemize}
+          \item Fonction associant arc et quantité $f(u)$ dans le cadre du flot de la source au puit.
+          \item Pas de perte
+        \end{itemize}
+      \item Propriétés
+        \begin{itemize}
+          \item Flot compatible: flot qui traverse un arc ne doit pas dépasser sa capacité. $\forall u \in G, 0 \le f(u) \le c(u)$.
+          \item Flot complet: flot qui traverse un arc en saturant sa capacité. $\exists u \in G, f(u) = c(u)$.
+        \end{itemize}
+    \end{itemize}
+  \subsection{Coupe}
+    Ensemble d'arcs tel que si on les retire le graphe partiel ne contient plus de chemin de la source au puit.
+    \begin{itemize}
+      \item Propriétés
+        \begin{itemize}
+          \item Capacité: somme de la capacité des arcs de la coupe.
+          \item valeur d'un flot sera inférieure ou égale à la capacité de n'importe quelle coupe.
+          \item valeur maximum d'un flot toujours égale à la capacité minimum d'une coupe.
+          \item nombre de coupe exponentiel
+          \item Objectif: Flot maximal $\rightarrow$ Algo de Ford-Fulkerson
+            \begin{enumerate}
+              \item Flot nul
+              \item Chercher une chaîne source $\rightarrow$ (puit).
+              \item (répétée) : augmente flot
+            \end{enumerate}
+        \end{itemize}
+    \end{itemize}
+
+\rule{0.3\linewidth}{0.25pt}
+\section{Chemins}
+  \subsection{Analyse}
+    \begin{itemize}
+      \item Chemin critique: séquence de tâches.
+      \item Marge: possibilité d'une tâche d'être retardée sans impacter projet (tâche critique = marge nulle).
+      \item Marge totale: différence entre le début au plus tard de la tâche suivante la plus contraignante et la fin au plus tôt de la tâche elle-même.
+      \item Marge libre: différence entre le début au plus tôt du successeur le plus précoce et la fin au plus tôt de la tâche elle-même.
+    \end{itemize}
+  \subsection{Dijkstra}
+  \subsection{Rôle de la fonction d'étiquetage}
+    \begin{itemize}
+      \item Sémantique plus importante.
+      \item Restreindre procédures de recherche
+      Mais peu augmenter complexité es algorithmes de recherche.
+    \end{itemize}
+  \subsection{Requêtes:}
+    \begin{itemize}
+      \item Élémentaire: équivalent séléction/projection relationnelle.
+      \item Complexes:
+        \begin{itemize}
+          \item Évaluation d'un chemin de $A$ à $B$:
+          \item Composition d'opérateurs.
+          \item Équivalent à un calcul de fermeture transitive.
+        \end{itemize}
+    \end{itemize}
+  \subsection{Distance}
+    \begin{itemize}
+      \item Entre 2 n\oe uds: longueur du plus court chemin entre les 2.
+      \item Diamètre d'un graphe: la plus longue des distances entre 2 n\oe uds quelconques mais distincts.
+      \item Excentricité d'un sommet: la plus longue des distances à partir de ce sommet.
+      \item Centre d'un graphe: n\oe ud(s) d'excentricité minimale (rayon).
+      \item Cycle:
+        \begin{itemize}
+          \item longueur: nombre d'arêtes ou n\oe uds.
+          \item $g(G)$: longueur du cycle minimal.
+          \item Périmètre de G: longueur maximale d'un cycle.
+          \item Acyclique: $g(G) = 0$ et périmètre infini.
+        \end{itemize}
+
+    \end{itemize}
+
+
+
+
+
+
+
+
+% You can even have references
+
+\scriptsize
+\bibliographystyle{abstract}
+\bibliography{refFile}
+\end{multicols}
+\end{document}
